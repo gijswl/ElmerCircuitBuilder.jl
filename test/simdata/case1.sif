@@ -1,0 +1,53 @@
+Header
+  CHECK KEYWORDS "Warn"
+  Mesh DB "." "."
+  Results Directory "results"
+End
+
+!---------------------------------------------------------
+! Simulation setup
+!---------------------------------------------------------
+Simulation
+  Max Output Level = 7
+  Coordinate System = Cartesian
+  Simulation Type = Scanning
+End
+
+Constants
+  Boltzmann Constant = 1.380649e-23
+  Permeability of Vacuum = 1.25663706127e-6
+  Permittivity of Vacuum = 8.8541878188e-12
+  Stefan Boltzmann = 5.6703744191844294e-8
+  Unit Charge = 1.602176634e-19
+End
+
+
+!---------------------------------------------------------
+! Solver configuration
+!---------------------------------------------------------
+
+!---------------------------------------------------------
+! Materials
+!---------------------------------------------------------
+
+!---------------------------------------------------------
+! Bodies & boundary conditions
+!---------------------------------------------------------
+Body 1
+  Name = Coil
+End
+
+Body Force 1
+  Name = Circuit 1
+  I1_Source = Real 1.0
+End
+
+
+!---------------------------------------------------------
+! Components
+!---------------------------------------------------------
+Component 1
+  Name = T1
+  Master Bodies(1) = 1  ! Coil
+End
+

@@ -7,8 +7,10 @@ version = "0.1.0"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 Elmer = "7d1d0d61-b954-47ad-902e-083a93170a02"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+OrderedCollections = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 
 [compat]
 Dates = "1.11.0"
 Elmer = "0.1.0"
 LinearAlgebra = "1.11.0"
+OrderedCollections = "1.8.1"

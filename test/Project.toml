@@ -1,2 +1,6 @@
 [deps]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Elmer = "7d1d0d61-b954-47ad-902e-083a93170a02"
+
+[compat]
+Elmer = "0.1.0"

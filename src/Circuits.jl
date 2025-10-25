@@ -61,13 +61,13 @@ get_components(c::Circuit) = c.components
 
 Adds a single `component` or array of `components` to circuit `c`.
 """
-@inline function add_component!(c::Circuit, component::AbstractComponent)
+@inline function insert_component!(c::Circuit, component::AbstractComponent)
     push!(c.components, component)
 end
 
-function add_component!(c::Circuit, components::Vector{AbstractComponent})
+function insert_component!(c::Circuit, components::Vector{AbstractComponent})
     for component ∈ components
-        add_component!(c, component)
+        insert_component!(c, component)
     end
 end
 

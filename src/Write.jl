@@ -1,7 +1,7 @@
 
 format_source(name::String) = name * "_Source"
 
-function write_circuits(circuits::Vector{Circuit}, filename::String; path = "")
+function write_circuits(circuits::Vector{Circuit}, filename::String; path="")
     open(joinpath(path, filename), "w") do file
         write_circuits(file, circuits)
     end
