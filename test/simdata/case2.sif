@@ -61,16 +61,22 @@ End
 !---------------------------------------------------------
 Component 1
   Name = T1
-  Master Bodies(1) = 3  ! Coil3
+  Master Bodies(1) = 1  ! Coil1
+  Coil Type = Massive
+  Symmetry Coefficient = 1
 End
 
 Component 2
   Name = T2
   Master Bodies(1) = 2  ! Coil2
+  Coil Type = Massive
+  Symmetry Coefficient = 1
 End
 
 Component 3
   Name = T3
-  Master Bodies(1) = 1  ! Coil1
+  Master Bodies(1) = 3  ! Coil3
+  Coil Type = Massive
+  Symmetry Coefficient = 1
 End
 

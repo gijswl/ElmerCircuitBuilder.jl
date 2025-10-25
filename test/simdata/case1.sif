@@ -49,5 +49,11 @@ End
 Component 1
   Name = T1
   Master Bodies(1) = 1  ! Coil
+  Coil Type = Stranded
+  Number of Turns = 20
+  Resistance = 0
+  Coil Use W Vector = Logical True
+  W Vector Variable Name = String "CoilCurrent e"
+  Electrode Area = 0.0001
 End
 
