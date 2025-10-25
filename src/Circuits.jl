@@ -56,8 +56,8 @@ Returns the components of circuit `c`.
 get_components(c::Circuit) = c.components
 
 """
-    add_component!(c, component)
-    add_component!(c, components)
+    insert_component!(c, component)
+    insert_component!(c, components)
 
 Adds a single `component` or array of `components` to circuit `c`.
 """

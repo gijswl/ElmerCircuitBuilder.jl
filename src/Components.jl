@@ -49,7 +49,7 @@ end
 
 """
     mutable struct VoltageSource
-    VoltageSource(name, nodes; value)
+    VoltageSource(name, nodes, value)
 
 Represents a voltage source named `name` with a `value` in [V]. It is connected between two circuit `nodes`.
 
@@ -67,7 +67,7 @@ end
 
 """
     mutable struct CurrentSource
-    CurrentSource(name, nodes; value)
+    CurrentSource(name, nodes, value)
 
 Represents a current source named `name` with a `value` in [A]. It is connected between two circuit `nodes`.
 Current is defined as flowing _out_ of the positive terminal `nodes[1]`.
