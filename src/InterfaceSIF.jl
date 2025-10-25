@@ -87,7 +87,7 @@ end
 function terminal_data!(data, terminal::TerminalClosed)
     data["Coil Use W Vector"] = true
     data["W Vector Variable Name"] = "String \"CoilCurrent e\""
-    data["Electrode Area"] = terminal.area
+    data["Electrode Area"] = "Real $(terminal.area)"
 end
 
 function terminal_data!(data, terminal::TerminalOpen)

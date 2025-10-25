@@ -54,6 +54,6 @@ Component 1
   Resistance = 0
   Coil Use W Vector = Logical True
   W Vector Variable Name = String "CoilCurrent e"
-  Electrode Area = 0.0001
+  Electrode Area = Real 0.0001
 End
 
