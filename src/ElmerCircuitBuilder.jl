@@ -1,5 +1,6 @@
 module ElmerCircuitBuilder
 
+import Dates: format, now
 using LinearAlgebra
 
 export Resistor, Inductor, Capacitor, VoltageSource, CurrentSource, ElmerComponentMassive, ElmerComponentStranded, ElmerComponentFoil
@@ -8,5 +9,8 @@ include("Components.jl")
 export Circuit
 export create_circuits, add_component!
 include("Circuits.jl")
+
+export write_circuits
+include("Write.jl")
 
 end # module ElmerCircuitBuilder

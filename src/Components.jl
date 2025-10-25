@@ -7,6 +7,7 @@ abstract type AbstractComponent end
 
 """
     mutable struct Resistor
+    Resistor(name, nodes, value)
 
 Represents a resistor named `name` with a `value` in [Ω]. It is connected between two circuit `nodes`.
 
@@ -20,6 +21,7 @@ end
 
 """
     mutable struct Inductor
+    Inductor(name, nodes, value)
 
 Represents a inductor named `name` with a `value` in [H]. It is connected between two circuit `nodes`.
 
@@ -33,6 +35,7 @@ end
 
 """
     mutable struct Capacitor
+    Capacitor(name, nodes, value)
 
 Represents a capacitor named `name` with a `value` in [F]. It is connected between two circuit `nodes`.
 
@@ -46,6 +49,7 @@ end
 
 """
     mutable struct VoltageSource
+    VoltageSource(name, nodes, value)
 
 Represents a voltage source named `name` with a `value` in [V]. It is connected between two circuit `nodes`.
 
@@ -54,11 +58,12 @@ It is used to build the Elmer circuit's B-matrix.
 mutable struct VoltageSource <: AbstractComponent
     name::String
     nodes::NTuple{2,Int}
-    value::Real
+    value::Union{Real,Complex}
 end
 
 """
     mutable struct CurrentSource
+    CurrentSource(name, nodes, value)
 
 Represents a current source named `name` with a `value` in [A]. It is connected between two circuit `nodes`.
 Current is defined as flowing _out_ of the positive terminal `nodes[1]`.
@@ -68,11 +73,12 @@ It is used to build the Elmer circuit's B-matrix.
 mutable struct CurrentSource <: AbstractComponent
     name::String
     nodes::NTuple{2,Int}
-    value::Real
+    value::Union{Real,Complex}
 end
 
 """
     mutable struct ElmerComponentMassive
+    ElmerComponentMassive(name, nodes, component_id, master_bodies; sector=1, closed=true, boundaries=(-1, -1))
 
 Represents a massive 2D or 3D coil named `name` connected between two circuit `nodes`.
 The component is associated with the Component (`component_id`) section in the SIF and the physical bodies in `master_bodies`.
@@ -102,6 +108,7 @@ end
 
 """
     mutable struct ElmerComponentStranded
+    ElmerComponentStranded(name, nodes, component_id, master_bodies, number_turns, resistance; sector=1, closed=true, boundaries=(-1, -1))
 
 Represents a stranded 2D or 3D coil named `name` connected between two circuit `nodes`.
 The stranded coil has a `number_turns` turns and a DC resistance of `resistance`.

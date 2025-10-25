@@ -21,14 +21,8 @@ Creates an array of empty `Circuit`s with indices from 1 to `n`.
 """
 create_circuits(n::Int) = [Circuit(i) for i ∈ 1:n]
 
-"""
-    get_nnodes(c)
-
-Returns the number of circuit nodes in circuit `c`.
-"""
-function get_nnodes(c::Circuit)
+function get_nodes(c::Circuit)
     nodes = Int[]
-
     for component ∈ c.components
         node1 = component.nodes[1]
         node2 = component.nodes[2]
@@ -37,8 +31,15 @@ function get_nnodes(c::Circuit)
         node2 ∈ nodes || push!(nodes, node2)
     end
 
-    return length(nodes)
+    return nodes
 end
+
+"""
+    get_nnodes(c)
+
+Returns the number of circuit nodes in circuit `c`.
+"""
+get_nnodes(c::Circuit) = length(get_nodes(c))
 
 """
     get_nedges(c)
@@ -87,7 +88,7 @@ function get_incidence_matrix(c::Circuit)
         A[component.nodes[2], edge] = -1
     end
 
-    # Remove the reference row
+    # Remove the reference node row
     node_idx = 1:get_nnodes(c) .!= c.ref_node
     return A[node_idx, :]
 end
@@ -193,9 +194,9 @@ end
 
 Defines the contribution of each `component` type to the right-hand side vector `rhs`.
 """
-add_rhs_entry!(::Vector{<:Real}, ::Int, ::AbstractComponent) = nothing
-add_rhs_entry!(rhs::Vector{<:Real}, i::Int, component::CurrentSource) = (rhs[i] = component.value)
-add_rhs_entry!(rhs::Vector{<:Real}, i::Int, component::VoltageSource) = (rhs[i] = -component.value)
+add_rhs_entry!(::Vector, ::Int, ::AbstractComponent) = nothing
+add_rhs_entry!(rhs::Vector, i::Int, component::CurrentSource) = (rhs[i] = component.name)
+add_rhs_entry!(rhs::Vector, i::Int, component::VoltageSource) = (rhs[i] = component.name)
 
 """
     get_rhs(c)
@@ -204,7 +205,7 @@ Returns the right-hand side vector of circuit `c`.
 The vector contains contributions from `VoltageSource` and `CurrentSource`.
 """
 function get_rhs(c::Circuit)
-    rhs = zeros(get_nedges(c))
+    rhs = ["" for _ ∈ 1:get_nedges(c)]
     for (edge, component) ∈ enumerate(get_components(c))
         add_rhs_entry!(rhs, edge, component)
     end
@@ -224,21 +225,22 @@ end
 swap_rows!(m::Matrix, i::Int, j::Int) = Base.swaprows!(m, i, j)
 
 """
-    swap_rows!(Bmat, Amat, svec, nedges)
+    swap_rows!(Bmat, Amat, svec, c)
 
 Ensures that voltage components rows are zero rows by systematically swapping rows.
 In order to couple lumped circuit networks to Elmer, the voltage rows for Elmer Components
     need to be empty. This way the matrix is completed by using the Component keyword in the .sif file.
 """
-function swap_rows!(Bmat::Matrix, Amat::Matrix, svec::Vector, nedges::Int)
-    Z = Bmat .+ Amat .+ svec
+function swap_rows!(Bmat::Matrix, Amat::Matrix, svec::Vector, c::Circuit)
+    Z = Bmat .+ Amat
     idx = axes(Z, 1)
     zero_rows = [all(Z[row, :] .== 0) for row ∈ idx]
     zero_rows = idx[zero_rows]
 
-    idx = axes(get_components(c), 1)
-    vcomp_rows = [typeof(component) <: ElmerComponent for component ∈ get_components(c)]
-    vcomp_rows = idx[vcomp_rows] .+ nedges
+    components = get_components(c)
+    idx = axes(components, 1)
+    vcomp_rows = [typeof(component) <: ElmerComponent for component ∈ components]
+    vcomp_rows = idx[vcomp_rows] .+ get_nedges(c)
 
     for (zrow, vrow) ∈ zip(zero_rows, vcomp_rows)
         swap_rows!(Bmat, zrow, vrow)
@@ -290,10 +292,44 @@ function get_tableau_matrix(c::Circuit)
 
     ElmerB = vcat(M_kcl, M_kvl, M_comp)
     ElmerA = vcat(zeros(mnodes + nedges, mnodes + 2 * nedges), hcat(Lmat, Cmat, zeros(nedges, mnodes)))
-    ElmerSrc = vcat(zeros(mnodes + nedges), fvec)
+
+    src_zero = ["" for _ ∈ 1:(mnodes+nedges)]
+    ElmerSrc = vcat(src_zero, fvec)
 
     fix_kvl_sign!(ElmerB, c)
-    swap_rows!(ElmerB, ElmerA, ElmerSrc, nedges)
+    swap_rows!(ElmerB, ElmerA, ElmerSrc, c)
 
     return ElmerB, ElmerA, ElmerSrc
+end
+
+"""
+    get_unknown_names(c)
+
+Returns a list of names of the unknowns (degrees of freedom).
+"""
+function get_unknown_names(c::Circuit)
+    unknowns = String[]
+    nodes = setdiff(get_nodes(c), c.ref_node)
+
+    for component ∈ get_components(c)
+        if (typeof(component) <: ElmerComponent)
+            push!(unknowns, "i_component($(component.component_id))")
+        else
+            push!(unknowns, "i_$(component.name)")
+        end
+    end
+
+    for component ∈ get_components(c)
+        if (typeof(component) <: ElmerComponent)
+            push!(unknowns, "v_component($(component.component_id))")
+        else
+            push!(unknowns, "v_$(component.name)")
+        end
+    end
+
+    for node ∈ nodes
+        push!(unknowns, "u_$(node)_circuit_$(c.index)")
+    end
+
+    return unknowns
 end
