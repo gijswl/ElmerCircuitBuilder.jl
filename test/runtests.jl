@@ -20,7 +20,7 @@ begin
 
     components, body_forces = add_circuits!(sif, c)
 
-    add_coil_data!(sif, 1, CoilStranded(20, 0), TerminalClosed(100e-6))
+    add_coil_data!(sif, 1, CoilStranded(20), TerminalClosed(100e-6))
 
     write(sif)
 end

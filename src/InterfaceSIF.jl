@@ -1,9 +1,12 @@
 abstract type AbstractCoilType end
 struct CoilMassive <: AbstractCoilType end
+
 struct CoilStranded <: AbstractCoilType
     number_turns::Int
-    resistance::Real
+    resistance::Union{Nothing,Real}
 end
+CoilStranded(number_turns::Int) = CoilStranded(number_turns, nothing)
+
 struct CoilFoil <: AbstractCoilType
     number_turns::Int
     thickness::Real
@@ -49,7 +52,7 @@ function add_circuits!(sif::SolverInformationFile, circuits::Vector{Circuit})
     return components, body_forces
 end
 
-function add_coil_data!(sif, id, coil::AbstractCoilType; symmetry::Real = 1)
+function add_coil_data!(sif, id, coil::AbstractCoilType; symmetry::Real=1)
     data = OrderedDict()
 
     coil_data!(data, coil)
@@ -75,7 +78,9 @@ end
 function coil_data!(data, coil::CoilStranded)
     data["Coil Type"] = "Stranded"
     data["Number of Turns"] = coil.number_turns
-    data["Resistance"] = coil.resistance
+    if (typeof(coil.resistance) <: Real)
+        data["Resistance"] = coil.resistance
+    end
 end
 
 function coil_data!(data, coil::CoilFoil)
