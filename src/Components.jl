@@ -15,7 +15,7 @@ It is used to build the Elmer circuit's B-matrix.
 """
 mutable struct Resistor <: AbstractComponent
     name::String
-    nodes::NTuple{2,Int}
+    nodes::NTuple{2, Int}
     value::Real
 end
 
@@ -29,7 +29,7 @@ It is used to build the Elmer circuit's A-matrix.
 """
 mutable struct Inductor <: AbstractComponent
     name::String
-    nodes::NTuple{2,Int}
+    nodes::NTuple{2, Int}
     value::Real
 end
 
@@ -43,7 +43,7 @@ It is used to build the Elmer circuit's A-matrix.
 """
 mutable struct Capacitor <: AbstractComponent
     name::String
-    nodes::NTuple{2,Int}
+    nodes::NTuple{2, Int}
     value::Real
 end
 
@@ -57,8 +57,8 @@ It is used to build the Elmer circuit's B-matrix.
 """
 mutable struct VoltageSource <: AbstractComponent
     name::String
-    nodes::NTuple{2,Int}
-    value::Union{Nothing,Real,Complex}
+    nodes::NTuple{2, Int}
+    value::Union{Nothing, Real, Complex}
 
     function VoltageSource(name, nodes, value=nothing)
         new(name, nodes, value)
@@ -76,8 +76,8 @@ It is used to build the Elmer circuit's B-matrix.
 """
 mutable struct CurrentSource <: AbstractComponent
     name::String
-    nodes::NTuple{2,Int}
-    value::Union{Nothing,Real,Complex}
+    nodes::NTuple{2, Int}
+    value::Union{Nothing, Real, Complex}
 
     function CurrentSource(name, nodes, value=nothing)
         new(name, nodes, value)
@@ -95,7 +95,7 @@ It is used to build the Elmer circuit's B-matrix.
 """
 mutable struct ElmerComponent <: AbstractComponent
     name::String
-    nodes::NTuple{2,Int}
+    nodes::NTuple{2, Int}
     component_id::Int
     master_bodies::Vector{Int}
 
@@ -104,4 +104,4 @@ mutable struct ElmerComponent <: AbstractComponent
     end
 end
 
-const SourceComponent = Union{VoltageSource,CurrentSource}
+const SourceComponent = Union{VoltageSource, CurrentSource}

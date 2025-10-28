@@ -2,13 +2,13 @@ abstract type AbstractCoilType end
 struct CoilMassive <: AbstractCoilType end
 
 struct CoilStranded <: AbstractCoilType
-    number_turns::Int
-    resistance::Union{Nothing,Real}
+    number_turns::Real
+    resistance::Union{Nothing, Real}
 end
-CoilStranded(number_turns::Int) = CoilStranded(number_turns, nothing)
+CoilStranded(number_turns::Real) = CoilStranded(number_turns, nothing)
 
 struct CoilFoil <: AbstractCoilType
-    number_turns::Int
+    number_turns::Real
     thickness::Real
 end
 
@@ -17,7 +17,7 @@ struct TerminalClosed <: AbstractTerminalType
     area::Real
 end
 struct TerminalOpen <: AbstractTerminalType
-    boundaries::NTuple{2,Int}
+    boundaries::NTuple{2, Int}
     symmetry::Real
 end
 TerminalOpen(bnd1::Int, bnd2::Int, symmetry::Real) = TerminalOpen((bnd1, bnd2), symmetry)
@@ -38,10 +38,10 @@ function add_circuits!(sif::SolverInformationFile, circuits::Vector{Circuit})
                 entry = format_source(component.name)
 
                 if (typeof(component.value) <: Complex)
-                    bf_data["$entry re"] = "Real $(real(component.value))"
-                    bf_data["$entry im"] = "Real $(imag(component.value))"
+                    bf_data["$entry re"] = real(component.value)
+                    bf_data["$entry im"] = imag(component.value)
                 elseif (typeof(component.value) <: Real)
-                    bf_data[entry] = "Real $(component.value)"
+                    bf_data[entry] = component.value
                 end
             end
         end
@@ -77,7 +77,7 @@ end
 
 function coil_data!(data, coil::CoilStranded)
     data["Coil Type"] = "Stranded"
-    data["Number of Turns"] = coil.number_turns
+    data["Number of Turns"] = Float64(coil.number_turns)
     if (typeof(coil.resistance) <: Real)
         data["Resistance"] = coil.resistance
     end
@@ -86,13 +86,13 @@ end
 function coil_data!(data, coil::CoilFoil)
     data["Coil Type"] = "Foil Winding"
     data["Coil Thickness"] = coil.thickness
-    data["Number of Turns"] = coil.number_turns
+    data["Number of Turns"] = Float64(coil.number_turns)
 end
 
 function terminal_data!(data, terminal::TerminalClosed)
     data["Coil Use W Vector"] = true
     data["W Vector Variable Name"] = "String \"CoilCurrent e\""
-    data["Electrode Area"] = "Real $(terminal.area)"
+    data["Electrode Area"] = terminal.area
 end
 
 function terminal_data!(data, terminal::TerminalOpen)

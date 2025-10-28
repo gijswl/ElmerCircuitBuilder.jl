@@ -8,17 +8,17 @@ End
 ! Simulation setup
 !---------------------------------------------------------
 Simulation
-  Max Output Level = 7
+  Max Output Level = Integer 7
   Coordinate System = Cartesian
   Simulation Type = Scanning
 End
 
 Constants
-  Boltzmann Constant = 1.380649e-23
-  Permeability of Vacuum = 1.25663706127e-6
-  Permittivity of Vacuum = 8.8541878188e-12
-  Stefan Boltzmann = 5.6703744191844294e-8
-  Unit Charge = 1.602176634e-19
+  Boltzmann Constant = Real 1.380649e-23
+  Permeability of Vacuum = Real 1.25663706127e-6
+  Permittivity of Vacuum = Real 8.8541878188e-12
+  Stefan Boltzmann = Real 5.6703744191844294e-8
+  Unit Charge = Real 1.602176634e-19
 End
 
 
@@ -48,9 +48,9 @@ End
 !---------------------------------------------------------
 Component 1
   Name = T1
-  Master Bodies(1) = 1  ! Coil
+  Master Bodies(1) = Integer 1  ! Coil
   Coil Type = Stranded
-  Number of Turns = 20
+  Number of Turns = Real 20.0
   Coil Use W Vector = Logical True
   W Vector Variable Name = String "CoilCurrent e"
   Electrode Area = Real 0.0001
