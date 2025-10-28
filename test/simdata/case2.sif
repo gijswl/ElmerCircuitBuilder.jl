@@ -63,20 +63,20 @@ Component 1
   Name = T1
   Master Bodies(1) = Integer 1  ! Coil1
   Coil Type = Massive
-  Symmetry Coefficient = Integer 1
+  Symmetry Coefficient = Real 1.0
 End
 
 Component 2
   Name = T2
   Master Bodies(1) = Integer 2  ! Coil2
   Coil Type = Massive
-  Symmetry Coefficient = Integer 1
+  Symmetry Coefficient = Real 1.0
 End
 
 Component 3
   Name = T3
   Master Bodies(1) = Integer 3  ! Coil3
   Coil Type = Massive
-  Symmetry Coefficient = Integer 1
+  Symmetry Coefficient = Real 1.0
 End
 

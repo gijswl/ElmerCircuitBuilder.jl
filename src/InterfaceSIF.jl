@@ -52,7 +52,7 @@ function add_circuits!(sif::SolverInformationFile, circuits::Vector{Circuit})
     return components, body_forces
 end
 
-function add_coil_data!(sif, id, coil::AbstractCoilType; symmetry::Real=1)
+function add_coil_data!(sif, id, coil::AbstractCoilType; symmetry::Real=1.0)
     data = OrderedDict()
 
     coil_data!(data, coil)
